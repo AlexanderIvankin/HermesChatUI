@@ -16,13 +16,13 @@ export function Header({ lang, theme, onToggleLang, onToggleTheme, t }: Props) {
       </div>
       <div className="title">
         <h1>Hermes</h1>
-        <span className="status">
+        <div className="status">
           <span className="dot" /> {t("status")}
-        </span>
+        </div>
       </div>
       <div className="actions">
         <button className="themeBtn" onClick={onToggleTheme} title="Тема">
-          {theme === "dark" ? "🌙" : "☀️"}
+          {theme === "dark" ? <span>🌙</span> : <span>☀️</span>}
         </button>
         <button className="langBtn" onClick={onToggleLang} title="Язык">
           {lang === "ru" ? "EN" : "RU"}

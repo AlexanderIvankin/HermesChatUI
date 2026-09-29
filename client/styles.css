@@ -154,9 +154,11 @@ body::before {
 .title {
   flex: 1;
   min-width: 0;
-  /* чтобы длинный текст не ломал layout */
+  /* Чтобы длинный текст не ломал layout */
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  /* Центрирует заголовок и статус по вертикали внутри .title */
 }
 
 .title h1 {
@@ -164,23 +166,39 @@ body::before {
   font-weight: 700;
   letter-spacing: .6px;
   color: var(--gold);
+  margin: 0;
+  /* Убираем дефолтные отступы, чтобы они не ломали выравнивание */
 }
 
 .status {
   font-size: 13px;
+  line-height: 1;
+  /* Исправлено: height вместо hight */
   color: var(--gold);
-  display: flex;
+
+  /* Переводим в inline-flex для более строгого инлайнового выравнивания */
+  display: inline-flex;
   align-items: center;
+  margin-top: 5px;
 }
 
 .status .dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
+  /* Используем em, чтобы размеры привязались к размеру шрифта (13px) */
+  width: 0.6em;
+  /* примерно 8px */
+  height: 0.6em;
+  /* примерно 8px */
   border-radius: 50%;
   background: var(--theme-color2);
   margin-right: 6px;
-  box-shadow: 0 0 6px var(--theme-color2);
+  flex-shrink: 0;
+
+  /* Смещаем точку на пару пикселей вниз, чтобы компенсировать косяк базовой линии системных шрифтов */
+  position: relative;
+  top: 1px;
+
+  /* Уменьшили размытие, чтобы тень не ломала оптический центр круга */
+  box-shadow: 0 0 4px var(--theme-color2);
 }
 
 .actions {
@@ -245,6 +263,10 @@ body.theme-light .themeBtn {
   --theme-btn1: #4895ef;
   --theme-btn2: #4895ef;
   --btn-text: #ffffff;
+}
+
+body.theme-light .themeBtn span {
+  transform: translateX(1px);
 }
 
 /* ===== Lang toggle (RU / EN) ===== */
@@ -433,6 +455,11 @@ body.theme-dark .sendBtn {
 }
 
 .input-wrap textarea::placeholder {
+  color: var(--input-text);
+  opacity: 0.8;
+}
+
+.input-wrap textarea:focus::placeholder {
   color: transparent;
 }
 
