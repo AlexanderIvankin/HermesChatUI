@@ -1,0 +1,586 @@
+/* ============ THEME TOKENS ============ */
+:root {
+  --gold: #d4a017;
+  --theme-color1: #e63946;
+  --theme-color2: #d4a017;
+  --theme-btn1: var(--theme-color1);
+  --theme-btn2: var(--theme-color2);
+  --btn-text: #fff;
+  --panel-glass: rgba(255, 255, 255, .02);
+  --label-secondary: var(--gold);
+}
+
+body.theme-dark {
+  --bg: #1a0a0a;
+  --panel: #221011;
+  --chat-bg: #221011;
+  --bubble-user: #2b0000;
+  --bubble-hermes: #2a1410;
+  --bubble-text: #d4a017;
+  --text: #f4e9d7;
+  --muted: #b89b7a;
+  --accent: #e63946;
+  --btn-text: #fff;
+  --panel-glass: rgba(255, 255, 255, .02);
+  --label-secondary: var(--gold);
+  --bg-image: url("/images/dark-theme.jpg");
+  --overlay: radial-gradient(circle at 50% 0%, rgba(120, 20, 25, .5), rgba(20, 5, 5, .72) 70%);
+  --border: rgba(255, 255, 255, .12);
+  --input-bg: rgba(255, 255, 255, .07);
+  --input-text: var(--label-secondary);
+  --scrollbar: rgba(230, 57, 70, .35);
+  --scrollbar-hover: rgba(212, 160, 23, .55);
+}
+
+body.theme-light {
+  --theme-color1: #d4a017;
+  --theme-color2: #d4a017;
+  --bg: #eaf4ff;
+  --panel: #2e6fd6;
+  --chat-bg: #2e6fd6;
+  --bubble-user: #5aa5f0;
+  --bubble-hermes: #7799ff;
+  --bubble-text: #000055;
+  --text: #eef4ff;
+  --muted: #bdd2f0;
+  --accent: #4895ef;
+  --btn-text: #3a2500;
+  --panel-glass: transparent;
+  --label-secondary: #3a2500;
+  --bg-image: url("/images/light-theme.jpg");
+  --overlay: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .35));
+  --border: rgba(255, 255, 255, .18);
+  --input-bg: rgba(255, 255, 255, .18);
+  --input-text: var(--bubble-text);
+  --scrollbar: rgba(255, 255, 255, .5);
+  --scrollbar-hover: rgba(212, 160, 23, .8);
+}
+
+/* ============ RESET ============ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* ============ BODY ============ */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-image) center/cover no-repeat fixed;
+  background-color: var(--bg);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  /* чтобы скроллился только #chat */
+  transition: background-color .3s;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--overlay);
+  z-index: 0;
+  pointer-events: none;
+  /* фон не должен ловить клики */
+}
+
+/* ============ APP SHELL ============ */
+/* #root растянут на всю ширину, .app центрируется внутри него */
+#root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  /* ← фиксируем ширину окна */
+  height: min(92vh, 860px);
+  background: var(--panel);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+
+/* ============ HEADER ============ */
+.header {
+  flex: 0 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, .02);
+}
+
+.avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--theme-color1), var(--theme-color2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--theme-color2) 40%, transparent);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  /* чтобы длинный текст не ломал layout */
+  display: flex;
+  flex-direction: column;
+}
+
+.title h1 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  color: var(--gold);
+}
+
+.status {
+  font-size: 13px;
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+}
+
+.status .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--theme-color2);
+  margin-right: 6px;
+  box-shadow: 0 0 6px var(--theme-color2);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ============ BUTTONS ============ */
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 14px;
+  height: 46px;
+  padding: 0 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--btn-text);
+  background: linear-gradient(135deg, var(--theme-color1), var(--theme-color2));
+  transition: transform .08s ease, opacity .15s, filter .15s;
+}
+
+button:hover {
+  filter: brightness(1.08);
+}
+
+button:active {
+  transform: scale(.95);
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  height: 40px;
+  padding: 0 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 15px;
+}
+
+/* ===== Theme toggle button (🌙 / ☀️) ===== */
+.themeBtn {
+  line-height: 1;
+  height: 40px;
+  padding: 0 14px;
+  background: linear-gradient(135deg, var(--theme-btn1), var(--theme-btn2));
+  border: 1px solid var(--border);
+  color: var(--btn-text);
+}
+
+body.theme-dark .themeBtn {
+  --theme-btn1: #2b0000;
+  --theme-btn2: #2b0000;
+  --btn-text: #d4a017;
+}
+
+body.theme-light .themeBtn {
+  --theme-btn1: #4895ef;
+  --theme-btn2: #4895ef;
+  --btn-text: #ffffff;
+}
+
+/* ===== Lang toggle (RU / EN) ===== */
+.langBtn {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  /* по умолчанию — как у .btn-secondary (мягкий фон) */
+  background: var(--input-bg);
+  color: var(--gold);
+}
+
+body.theme-light .langBtn {
+  /* в светлой теме — золотой градиент (как в оригинале) */
+  background: linear-gradient(135deg, var(--theme-color1), var(--theme-color2));
+  color: var(--btn-text);
+  border-color: transparent;
+}
+
+body.theme-dark .langBtn {
+  /* в тёмной — приглушённый красный градиент */
+  background: linear-gradient(135deg, rgba(255, 33, 33, .33), rgba(120, 55, 55, .33));
+  color: #d4a017;
+  border-color: transparent;
+}
+
+/* ===== Send button ===== */
+.sendBtn {
+  flex: 0 0 auto;
+  height: 46px;
+}
+
+body.theme-light .sendBtn {
+  background: linear-gradient(135deg, var(--theme-color1), var(--theme-color2));
+  color: var(--btn-text);
+}
+
+body.theme-dark .sendBtn {
+  background: linear-gradient(135deg, rgba(255, 33, 33, .33), rgba(120, 55, 55, .33));
+  color: #d4a017;
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+
+/* ============ CHAT AREA ============ */
+#chat {
+  flex: 1 1 auto;
+  min-height: 0;
+  /* ключевое: иначе flex-ребёнок не сжимается и overflow не работает */
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--chat-bg);
+  transition: background-color .3s;
+}
+
+.msg-wrap {
+  display: flex;
+  flex-direction: column;
+  max-width: 78%;
+}
+
+.msg-wrap.user {
+  align-self: flex-end;
+}
+
+.msg-wrap.hermes {
+  align-self: flex-start;
+}
+
+.msg {
+  padding: 11px 15px;
+  border-radius: 16px;
+  line-height: 1.45;
+  font-size: 15px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--bubble-text);
+  position: relative;
+}
+
+.msg.user {
+  background: var(--bubble-user);
+  border-bottom-right-radius: 4px;
+}
+
+.msg.hermes {
+  background: var(--bubble-hermes);
+  border-bottom-left-radius: 4px;
+}
+
+.msg.typing {
+  font-style: italic;
+  font-size: 14px;
+  opacity: .8;
+}
+
+.msgText {
+  display: inline;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.playBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: 8px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 14px;
+  background: rgba(255, 255, 255, .12);
+  border: 1px solid rgba(255, 255, 255, .18);
+  vertical-align: middle;
+}
+
+.dlBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  margin-right: 6px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--btn-text);
+  background: linear-gradient(135deg, var(--theme-color1), var(--theme-color2));
+}
+
+.genImg {
+  display: block;
+  max-width: 280px;
+  max-height: 280px;
+  margin-top: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  cursor: zoom-in;
+}
+
+/* ============ FOOTER / COMPOSER ============ */
+.footer {
+  flex: 0 0 auto;
+  padding: 14px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  /* ← выравнивание по центру всех элементов */
+  background: rgba(255, 255, 255, .02);
+}
+
+.input-wrap {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  /* центрируем сам textarea в обёртке */
+  min-height: 46px;
+  background: var(--input-bg);
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.input-wrap textarea {
+  flex: 1 1 auto;
+  width: 100%;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--input-text);
+  font-size: 15px;
+  font-family: inherit;
+  padding: 12px 14px;
+  line-height: 20px;
+  min-height: 46px;
+  max-height: 120px;
+  align-content: center;
+  scrollbar-width: none;
+}
+
+.input-wrap textarea::placeholder {
+  color: transparent;
+}
+
+/* Кнопки микрофона и файла */
+.recBtn,
+.fileBtn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+}
+
+.recBtn.recording {
+  background: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: .6;
+  }
+}
+
+.sendBtn {
+  flex: 0 0 auto;
+  height: 46px;
+}
+
+/* ============ MISC ============ */
+.error {
+  color: #ff8888;
+  padding: 8px 20px;
+  font-size: 13px;
+  flex: 0 0 auto;
+}
+
+/* ============ SCROLLBARS ============ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 20px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar) transparent;
+}
+
+/* ============ CENTERED INPUT PLACEHOLDER ============ */
+.input-ph {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--label-secondary);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 14px;
+  transition: opacity .15s;
+  pointer-events: none;
+}
+
+.input-ph.hidden {
+  opacity: 0;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+
+/* ============ EMOJI ALIGNMENT ============ */
+.themeBtn,
+.recBtn,
+.fileBtn,
+.playBtn {
+  line-height: 1;
+}
+
+.themeBtn>span,
+.recBtn .mic-icon,
+#fileBtn,
+.fileBtn {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.themeBtn,
+.recBtn,
+.fileBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.recBtn {
+  flex: 0 0 auto;
+  min-width: 96px;
+  width: auto;
+  height: 46px;
+}
+
+button.fileBtn {
+  flex: 0 0 46px;
+  width: 46px;
+  min-width: 46px;
+  max-width: 46px;
+  height: 46px;
+  min-height: 46px;
+  max-height: 46px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+}

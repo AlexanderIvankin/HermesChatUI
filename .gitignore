@@ -1,0 +1,14 @@
+node_modules/
+/PythonSRC
+/downloads
+/uploads
+
+data/sessions.json
+
+hermes_session_id.txt
+
+*.xlsx~
+*.xls~
+~$*.xlsx
+
+.env
